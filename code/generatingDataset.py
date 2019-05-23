@@ -14,10 +14,14 @@ parser.add_argument("--IMGHIGHT", type=int, default=100)
 parser.add_argument("--IMGWIDTH", type=int, default=60)
 #字符集
 parser.add_argument("--CHACTERS", type=str, default="0123456789abcdefghijklmnopqrstuvwxyz")
-#生成图片的个数
-parser.add_argument("--IMAGENUMS", type=int, default=20)
-#图片保存路径
-parser.add_argument("--ROOTDIR", type=str, default="../imgs/origin/")
+#训练图片的个数
+parser.add_argument("--TRAINNUMS", type=int, default=19)
+#测试图片的个数
+parser.add_argument("--TESTNUMS", type=int, default=1)
+#训练图片保存路径
+parser.add_argument("--TRAINPATH", type=str, default="../imgs/train/")
+#测试图片保存路径
+parser.add_argument("--TESTPATH", type=str, default="../imgs/test/")
 #验证码包含的字符的个数
 parser.add_argument("--CHARCOUNT", type=int, default=4)
 # 图片格式
@@ -34,29 +38,40 @@ class GenerateingDataset:
         self.IMGHIGHT=args.IMGHIGHT
         self.IMGWIDTH = args.IMGWIDTH
         self.CHACTERS = args.CHACTERS
-        self.IMAGENUMS = args.IMAGENUMS
-        self.ROOTDIR = args.ROOTDIR
+        self.TRAINNUMS = args.TRAINNUMS
+        self.TESTNUMS = args.TESTNUMS
+        self.TRAINPATH = args.TRAINPATH
+        self.TESTPATH = args.TESTPATH
         self.IMGFORMAT = args.IMGFORMAT
         self.CHARCOUNT=args.CHARCOUNT
 
-    def _genData(self,text,filename):
-        generator = ImageCaptcha(width=self.IMGHIGHT, height=self.IMGWIDTH)  # 指定大小
-        img = generator.generate_image(text)  # 生成图片
-        img.save(filename)  # 保存图片
 
-
+    """
+        生成图片    
+    """
+    def _genData(self,filepath):
+        text = ""
+        for j in range(self.CHARCOUNT):
+            text += random.choice(self.CHACTERS)
+        timec = str(time.time()).replace(".", "")
+        filename = os.path.join(filepath, "{}_{}.{}".format(text, timec, self.IMGFORMAT))
+        generator = ImageCaptcha(width=self.IMGHIGHT, height=self.IMGWIDTH)
+        img = generator.generate_image(text)
+        img.save(filename)
+    """
+        生成训练和测试的数据集
+    """
     def genDataSet(self):
         # 判断文件夹是否存在
-        if not os.path.exists(self.ROOTDIR):
-            os.mkdir(self.ROOTDIR)
+        if not os.path.exists(self.TRAINPATH):
+            os.mkdir(self.TRAINPATH)
+        if not os.path.exists(self.TESTPATH):
+            os.mkdir(self.TESTPATH)
         #遍历生成图片
-        for i in range(self.IMAGENUMS):
-            text = ""
-            for j in range(self.CHARCOUNT):
-                text += random.choice(self.CHACTERS)
-            timec = str(time.time()).replace(".", "")
-            p = os.path.join(self.ROOTDIR, "{}_{}.{}".format(text, timec, self.IMGFORMAT))
-            self._genData(text, p)
+        for i in range(self.TRAINNUMS):
+            self._genData(self.TRAINPATH)
+        for i in range(self.TESTNUMS):
+            self._genData(self.TESTPATH)
 
 
 
