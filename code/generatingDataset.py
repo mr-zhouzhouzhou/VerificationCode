@@ -35,27 +35,18 @@ args = parser.parse_args()
 class GenerateingDataset:
 
     def __init__(self,args):
-        self.IMGHIGHT=args.IMGHIGHT
-        self.IMGWIDTH = args.IMGWIDTH
-        self.CHACTERS = args.CHACTERS
-        self.TRAINNUMS = args.TRAINNUMS
-        self.TESTNUMS = args.TESTNUMS
-        self.TRAINPATH = args.TRAINPATH
-        self.TESTPATH = args.TESTPATH
-        self.IMGFORMAT = args.IMGFORMAT
-        self.CHARCOUNT=args.CHARCOUNT
-
+        self.args=args
 
     """
         生成图片    
     """
     def _genData(self,filepath):
         text = ""
-        for j in range(self.CHARCOUNT):
-            text += random.choice(self.CHACTERS)
+        for j in range(self.args.CHARCOUNT):
+            text += random.choice(self.args.CHACTERS)
         timec = str(time.time()).replace(".", "")
-        filename = os.path.join(filepath, "{}_{}.{}".format(text, timec, self.IMGFORMAT))
-        generator = ImageCaptcha(width=self.IMGHIGHT, height=self.IMGWIDTH)
+        filename = os.path.join(filepath, "{}_{}.{}".format(text, timec, self.args.IMGFORMAT))
+        generator = ImageCaptcha(width=self.args.IMGHIGHT, height=self.args.IMGWIDTH)
         img = generator.generate_image(text)
         img.save(filename)
     """
@@ -63,15 +54,15 @@ class GenerateingDataset:
     """
     def genDataSet(self):
         # 判断文件夹是否存在
-        if not os.path.exists(self.TRAINPATH):
-            os.mkdir(self.TRAINPATH)
-        if not os.path.exists(self.TESTPATH):
-            os.mkdir(self.TESTPATH)
+        if not os.path.exists(self.args.TRAINPATH):
+            os.mkdir(self.args.TRAINPATH)
+        if not os.path.exists(self.args.TESTPATH):
+            os.mkdir(self.args.TESTPATH)
         #遍历生成图片
-        for i in range(self.TRAINNUMS):
-            self._genData(self.TRAINPATH)
-        for i in range(self.TESTNUMS):
-            self._genData(self.TESTPATH)
+        for i in range(self.args.TRAINNUMS):
+            self._genData(self.args.TRAINPATH)
+        for i in range(self.args.TESTNUMS):
+            self._genData(self.args.TESTPATH)
 
 
 
