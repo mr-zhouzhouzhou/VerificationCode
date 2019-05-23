@@ -15,9 +15,9 @@ parser.add_argument("--IMGWIDTH", type=int, default=60)
 #字符集
 parser.add_argument("--CHACTERS", type=str, default="0123456789abcdefghijklmnopqrstuvwxyz")
 #训练图片的个数
-parser.add_argument("--TRAINNUMS", type=int, default=19)
+parser.add_argument("--TRAINNUMS", type=int, default=1900)
 #测试图片的个数
-parser.add_argument("--TESTNUMS", type=int, default=1)
+parser.add_argument("--TESTNUMS", type=int, default=100)
 #训练图片保存路径
 parser.add_argument("--TRAINPATH", type=str, default="../imgs/train/")
 #测试图片保存路径
