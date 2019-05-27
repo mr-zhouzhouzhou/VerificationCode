@@ -13,11 +13,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--IMGHIGHT", type=int, default=100)
 parser.add_argument("--IMGWIDTH", type=int, default=60)
 #字符集
-parser.add_argument("--CHACTERS", type=str, default="0123456789abcdefghijklmnopqrstuvwxyz")
+parser.add_argument("--CHACTERS", type=str, default="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 #训练图片的个数
-parser.add_argument("--TRAINNUMS", type=int, default=1900)
+parser.add_argument("--TRAINNUMS", type=int, default=19000)
 #测试图片的个数
-parser.add_argument("--TESTNUMS", type=int, default=100)
+parser.add_argument("--TESTNUMS", type=int, default=1000)
 #训练图片保存路径
 parser.add_argument("--TRAINPATH", type=str, default="../imgs/train/")
 #测试图片保存路径
@@ -45,7 +45,8 @@ class GenerateingDataset:
         for j in range(self.args.CHARCOUNT):
             text += random.choice(self.args.CHACTERS)
         timec = str(time.time()).replace(".", "")
-        filename = os.path.join(filepath, "{}_{}.{}".format(text, timec, self.args.IMGFORMAT))
+        randamnum=random.randint(10, 99)
+        filename = os.path.join(filepath, "{}{}_{}_.{}".format(randamnum,timec,text, self.args.IMGFORMAT))
         generator = ImageCaptcha(width=self.args.IMGHIGHT, height=self.args.IMGWIDTH)
         img = generator.generate_image(text)
         img.save(filename)
